@@ -31,4 +31,13 @@ After code is pushed...
   * Deploy features behind 'Feature Flags'.
 
 
-
+### Google Auth
+* OAuth Flow:
+  * When a user clicks login their request will be forwarded to the Google OAuth api.
+  * Google will ask the user if this app has permission to authenticate through google.
+  * If the user grants permission, direct to a callback endpoint.
+  * Code is taken from the URL, user is put on hold.
+  * Send a request to google with the 'code' from the last step.
+  * Google sees the 'code' in the url and replies back with details about the user.
+  * Get user details, make a new user record in the database.
+  * Set user id in a cookie for the user.
