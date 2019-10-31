@@ -1,18 +1,15 @@
 const express = require('express');
-// Above gives access to the express library.
-// If we do set this constant, the Node Runtime only has access to common js modules.
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const app = express();
-// By calling express() like a function, it generates a new application.
-// Represents a running express app
-// Majority of projects use a single application inside of them.
-// This app is used to set up configuration for listening to incoming requests from the Node side of the app...
-// ... to the Express side and route those requests on to different route handlers.
-// Route Handlers we set up in the future will be registered with the Express app, somehow.
 
-app.get('/', (req, res) => {
-  res.send({hi: 'there'});
-});
+passport.use(new GoogleStrategy()); 
+// Creates a new instance of the passport google strategy.
+// Tells the app that we want to be able to authenticate users via Google.
+// Add options to configure how this strategy works in our environment. ClientID and ClientSecret. Given to us by Google's oauth service.
+// console.developers.google.com
+// http://localhost:5000/auth/google/callback Add this rather than a wildcard to the redirect, wildcards now deprecated.
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
