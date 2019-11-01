@@ -6,7 +6,7 @@ const keys = require('./config/keys');
 const app = express();
 
 passport.use(
-  new GoogleStrategy({
+  new GoogleStrategy({ // Known as a strategy called google (for passport below).
     clientID: keys.googleClientID,
     clientSecret: keys.googleSecret,
     callbackURL: '/auth/google/callback' // The route the user will be sent to after they grant our application permission.
@@ -15,11 +15,14 @@ passport.use(
     console.log(accessToken);
   })
 );
-// Creates a new instance of the passport google strategy.
-// Tells the app that we want to be able to authenticate users via Google.
-// Add options to configure how this strategy works in our environment. ClientID and ClientSecret. Given to us by Google's oauth service.
-// console.developers.google.com
-// http://localhost:5000/auth/google/callback Add this rather than a wildcard to the redirect, wildcards now deprecated.
+
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { // whenever someone comes to this route, we want to kick them into our OAuth flow (passport).
+    scope: ['profile', 'email'] // tell passport to attempt to authenticate on this route using the strategy google.
+    // "give us this users profile information and email as well."
+  })
+);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
