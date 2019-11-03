@@ -8,7 +8,7 @@ const app = express();
 passport.use(
   new GoogleStrategy({ // Known as a strategy called google (for passport below).
     clientID: keys.googleClientID,
-    clientSecret: keys.googleSecret,
+    clientSecret: keys.googleClientSecret,
     callbackURL: '/auth/google/callback' // The route the user will be sent to after they grant our application permission.
     // TO DO: Route Handler for the above.
   }, (accessToken) => {
@@ -23,6 +23,9 @@ app.get(
     // "give us this users profile information and email as well."
   })
 );
+
+app.get('/auth/google/callback', passport.authenticate('google')); // code in the URL is now available, user has given us permission.
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);

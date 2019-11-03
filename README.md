@@ -42,7 +42,7 @@ After code is pushed...
   * Get user details, make a new user record in the database.
   * Set user id in a cookie for the user.
 * Simple Secret Protection:
-  * In config/keys.js, we create an object `module.export = {}` that contains out client ID and secret.
+  * In config/keys.js, we create an object `module.exports = {}` that contains out client ID and secret.
     * Files like index.js can import these values for authenticating via Google.
   * In the future we will add some additional config such that prod deployments use the environment variables set in gitlab.
   * ID and Secret for dev environment added to `.gitignore`.
