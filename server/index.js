@@ -1,6 +1,10 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const keys = require('./config/keys');
 require('./services/passport'); // Need this otherwise this code would not be executed by default.
 // Can just be a base require because we are not exporting anything from passport.js to use here.
+
+mongoose.connect(keys.mongoURI);
 const app = express();
 
 require('./routes/authRoutes')(app); // authRoutes is a function that imports/attaches the routes from the authRoutes file.
