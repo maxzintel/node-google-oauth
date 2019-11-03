@@ -1,32 +1,10 @@
 const express = require('express');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const keys = require('./config/keys');
-
+require('./services/passport'); // Need this otherwise this code would not be executed by default.
+// Can just be a base require because we are not exporting anything from passport.js to use here.
 const app = express();
 
-passport.use(
-  new GoogleStrategy({ // Known as a strategy called google (for passport below).
-    clientID: keys.googleClientID,
-    clientSecret: keys.googleClientSecret,
-    callbackURL: '/auth/google/callback' // The route the user will be sent to after they grant our application permission.
-    // TO DO: Route Handler for the above.
-  }, (accessToken, refreshToken, profile, done) => {
-    console.log('accessToken: ', accessToken, '/n refreshToken: ', refreshToken, '/n profile: ', profile);
-    // refresh token will automatically update the accessToken to continue granting their access for a period of time.
-  })
-);
-
-app.get(
-  '/auth/google',
-  passport.authenticate('google', { // whenever someone comes to this route, we want to kick them into our OAuth flow (passport).
-    scope: ['profile', 'email'] // tell passport to attempt to authenticate on this route using the strategy google.
-    // "give us this users profile information and email as well."
-  })
-);
-
-app.get('/auth/google/callback', passport.authenticate('google')); // code in the URL is now available, user has given us permission.
-
+require('./routes/authRoutes')(app); // authRoutes is a function that imports/attaches the routes from the authRoutes file.
+// Takes the returned function we exported, and immediately call it with the app function.
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
