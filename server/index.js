@@ -11,8 +11,9 @@ passport.use(
     clientSecret: keys.googleClientSecret,
     callbackURL: '/auth/google/callback' // The route the user will be sent to after they grant our application permission.
     // TO DO: Route Handler for the above.
-  }, (accessToken) => {
-    console.log(accessToken);
+  }, (accessToken, refreshToken, profile, done) => {
+    console.log('accessToken: ', accessToken, '/n refreshToken: ', refreshToken, '/n profile: ', profile);
+    // refresh token will automatically update the accessToken to continue granting their access for a period of time.
   })
 );
 
