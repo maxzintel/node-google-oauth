@@ -15,10 +15,12 @@ passport.use(
       .then((existingUser) => {
         if (existingUser) {
           // we already have a record with the given profile id.
+          done(null, existingUser);
         } else {
           // make a new record
-          new User({ googleId: profile.id }).save();
-          // Creates a distinct model instance. ".save()" takes the model instance and saves it to the database.
+          new User({ googleId: profile.id }).save()
+          // ^Creates a distinct model instance. ".save()" takes the model instance and saves it to the database.
+            .then(user => done(null, user));
         }
       })
   })
