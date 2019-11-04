@@ -1,4 +1,5 @@
 module.exports = {
   clientID: 'xxx.apps.googleusercontent.com',
-  secret: 'xxx'
+  secret: 'xxx',
+  mongoURI: 'xxx'
 };
