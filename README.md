@@ -41,8 +41,30 @@ After code is pushed...
   * Google sees the 'code' in the url and replies back with details about the user.
   * Get user details, make a new user record in the database.
   * Set user id in a cookie for the user.
+
 * Simple Secret Protection:
   * In config/keys.js, we create an object `module.exports = {}` that contains out client ID and secret.
     * Files like index.js can import these values for authenticating via Google.
   * In the future we will add some additional config such that prod deployments use the environment variables set in gitlab.
   * ID and Secret for dev environment added to `.gitignore`.
+
+* MongoDB and Mongoose setup:
+  * MongoDB instance was manually provisioned on MongoDB Atlas - best to containerize instead, but for this project we will leave this as is for the timebeing.
+  * `server/models/Users.js`
+    * We construct a schema (where we define all possible parameters in the data).
+    * From this schema, we create a new model class, which corresponds to a collection in MongoDB.
+    * For now this just identifies one field, googleId, of type `String` that will be used to store google profile id's to uniquely identify users.
+  * `server/services/passport.js`
+    * Import the Users model class.
+    * In the passport callback function, line by line:
+      * (14) Query our mongoDB instance, return a promise containing the profile.id of a user if it already exists in the database.
+      * (15) Pass that profile.id into a conditional, note that it is `null` if the profile.id does not exist in the database yet.
+      * (16) If profile.id exists...
+      * (18) Resolve the promise, return the existing user record in the database.
+      * (19) else; if profile.id does not match anything currently in the database...
+      * (21) Create a distinct model instance in the User collection with googleID = profile.id. Save the model instance to the database for persistent storage.
+      * (23) Pass through the new model instance, resolve the promise and return the new user record.
+  * `server/index.js`
+    * Require in the User model.
+      * The config from the mongoose models file will load and Mongoose will be informed it is responsible for creating a collection of users.
+    * Connect to the MongoDB via the mongo URI.
