@@ -12,8 +12,14 @@ module.exports = (app) => { // Export this function from this file.
 
   app.get('/auth/google/callback', passport.authenticate('google')); // code in the URL is now available, user has given us permission.
 
+  app.get('/api/logout', (req, res) => {
+    req.logout(); // Kills the current cookie that identifies the user.
+    res.send(req.user); // Prove the user is no longer signed in. Should return, basically, nothing.
+  });
+
   app.get('/api/current_user', (req, res) => {
     res.send(req.user) // Shows that someone who has gone through the oauth flow receives a response...
     // ... aka has access to the user!
+    // Navigating here will display the mongo record for the current user.
   });
 };
