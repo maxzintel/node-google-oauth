@@ -10,6 +10,8 @@ require('./services/passport'); // Need this otherwise this code would not be ex
 mongoose.connect(keys.mongoURI);
 const app = express();
 
+// All of these app.use calls are wiring up middleware in our application.
+// Middleware is used to modify incoming requests to our app before they are sent off to route handlers.
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days before this cookie would expire, in milliseconds.
