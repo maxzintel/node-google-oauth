@@ -1,0 +1,11 @@
+image: node:alpine
+
+stages:
+  - build
+  - test
+
+cache:
+  paths:
+    - node_modules/
+    - server/node_modules
+
