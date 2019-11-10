@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: server
+  template:
+    metadata:
+      labels:
+        component: server
+    spec:
+      containers:
+      - name: server
+        image: s1dequest/oauth-server
+        ports:
+        - containerPort: 5000
+        env:
+          - name: service
+            value: service-name
+          - name: something-secret
+            valueFrom:
+              secretKeyRef:
+                name: secret-name
+                key: secret-key
