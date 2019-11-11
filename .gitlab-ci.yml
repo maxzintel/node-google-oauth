@@ -1,3 +1,6 @@
+services:
+  - docker
+
 variables:
   TEST_NAME: registry.gitlab.com/s1dequest/node-google-oauth:$CI_COMMIT_SHA # Adds unique tag name for each image change.
 
@@ -7,7 +10,7 @@ stages:
 deploy_docker_image:
   stage: deploy
   script:
-    - docker login -u s1dequest -p $runnerPassword registry.gitlab.com
+    - echo "$runnerPassword" | docker login --username "$DOCKER_ID" --password-stdin registry.gitlab.com
     - docker build -t $TEST_NAME -t registry.gitlab.com/s1dequest/node-google-oauth:latest ./server/Dockerfile ./server
     # Above tags image twice for ease of adoption.
     - docker push $TEST_NAME
