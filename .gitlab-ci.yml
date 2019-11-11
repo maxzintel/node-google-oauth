@@ -1,11 +1,18 @@
-image: node:alpine
+variables:
+  TEST_NAME: registry.gitlab.com/s1dequest/node-google-oauth:$CI_COMMIT_REF_NAME # Adds unique tag name for each image change.
 
 stages:
-  - build
-  - test
+  - deploy
 
-cache:
-  paths:
-    - node_modules/
-    - server/node_modules
+deploy_docker_image:
+  stage: deploy
+  script:
+    - docker login -u s1dequest -p $runnerPass registry.gitlab.com
+    - docker build -t $TEST_NAME -t registry.gitlab.com/s1dequest/node-google-oauth:latest ./server/Dockerfile ./server
+    # Above tags image twice for ease of adoption.
+    - docker push $TEST_NAME
+    - docker push registry.gitlab.com/s1dequest/node-google-oauth:latest
+    # Still need to add in K8s cmds when k8s is set up. Otherwise this isnt really deployed.
+  tags: 
+    - deploy
 
