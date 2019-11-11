@@ -7,7 +7,7 @@ stages:
 deploy_docker_image:
   stage: deploy
   script:
-    - docker login -u s1dequest -p $runnerPass registry.gitlab.com
+    - docker login -u s1dequest -p $runnerPassword registry.gitlab.com
     - docker build -t $TEST_NAME -t registry.gitlab.com/s1dequest/node-google-oauth:latest ./server/Dockerfile ./server
     # Above tags image twice for ease of adoption.
     - docker push $TEST_NAME
