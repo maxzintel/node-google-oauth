@@ -1,5 +1,5 @@
 variables:
-  TEST_NAME: registry.gitlab.com/s1dequest/node-google-oauth:$CI_COMMIT_REF_NAME # Adds unique tag name for each image change.
+  TEST_NAME: registry.gitlab.com/s1dequest/node-google-oauth:$CI_COMMIT_SHA # Adds unique tag name for each image change.
 
 stages:
   - deploy
