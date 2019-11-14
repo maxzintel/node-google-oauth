@@ -1,0 +1,19 @@
+sudo: required
+services:
+  - docker
+env:
+  global:
+    - SHA=$(git rev-parse HEAD)
+
+before_install:
+  - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_ID" --password-stdin
+  - docker build -t s1dequest/oauth-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true s1dequest/oauth-test npm run test
+
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
