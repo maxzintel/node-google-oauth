@@ -1,14 +1,15 @@
+image: docker:latest
 services:
-  - docker
+  - docker:dind
 
 variables:
   TEST_NAME: registry.gitlab.com/s1dequest/node-google-oauth:$CI_COMMIT_SHA # Adds unique tag name for each image change.
 
 stages:
-  - deploy
+  - build
 
-deploy_docker_image:
-  stage: deploy
+docker_build:
+  stage: build
   script:
     - echo "$runnerPassword" | docker login --username "$DOCKER_ID" --password-stdin registry.gitlab.com
     - docker build -t $TEST_NAME -t registry.gitlab.com/s1dequest/node-google-oauth:latest ./server/Dockerfile ./server
@@ -16,6 +17,6 @@ deploy_docker_image:
     - docker push $TEST_NAME
     - docker push registry.gitlab.com/s1dequest/node-google-oauth:latest
     # Still need to add in K8s cmds when k8s is set up. Otherwise this isnt really deployed.
-  tags: 
-    - deploy
+  tags:
+    - build
 
